@@ -1,0 +1,96 @@
+{
+    "codebase_version": "v3.0",
+    "robot_type": "ur5e",
+    "total_episodes": 49,
+    "total_frames": 4228,
+    "total_tasks": 1,
+    "chunks_size": 1000,
+    "data_files_size_in_mb": 100,
+    "video_files_size_in_mb": 200,
+    "fps": 10,
+    "splits": {
+        "train": "0:49"
+    },
+    "data_path": "data/chunk-{chunk_index:03d}/file-{file_index:03d}.parquet",
+    "video_path": "videos/{video_key}/chunk-{chunk_index:03d}/file-{file_index:03d}.mp4",
+    "features": {
+        "observation.images.wrist": {
+            "dtype": "image",
+            "shape": [
+                224,
+                224,
+                3
+            ],
+            "names": [
+                "height",
+                "width",
+                "channel"
+            ]
+        },
+        "observation.state": {
+            "dtype": "float32",
+            "shape": [
+                7
+            ],
+            "names": [
+                "ur5e_shoulder_pan_joint",
+                "ur5e_shoulder_lift_joint",
+                "ur5e_elbow_joint",
+                "ur5e_wrist_1_joint",
+                "ur5e_wrist_2_joint",
+                "ur5e_wrist_3_joint",
+                "gripper_robotiq_85_left_knuckle_joint"
+            ]
+        },
+        "action": {
+            "dtype": "float32",
+            "shape": [
+                7
+            ],
+            "names": [
+                "ur5e_shoulder_pan_joint",
+                "ur5e_shoulder_lift_joint",
+                "ur5e_elbow_joint",
+                "ur5e_wrist_1_joint",
+                "ur5e_wrist_2_joint",
+                "ur5e_wrist_3_joint",
+                "gripper_robotiq_85_left_knuckle_joint"
+            ]
+        },
+        "timestamp": {
+            "dtype": "float32",
+            "shape": [
+                1
+            ],
+            "names": null
+        },
+        "frame_index": {
+            "dtype": "int64",
+            "shape": [
+                1
+            ],
+            "names": null
+        },
+        "episode_index": {
+            "dtype": "int64",
+            "shape": [
+                1
+            ],
+            "names": null
+        },
+        "index": {
+            "dtype": "int64",
+            "shape": [
+                1
+            ],
+            "names": null
+        },
+        "task_index": {
+            "dtype": "int64",
+            "shape": [
+                1
+            ],
+            "names": null
+        }
+    }
+}

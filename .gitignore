@@ -1,0 +1,32 @@
+# Your API keys — never commit these
+.env
+raise_ros2_ws/src/.env
+
+# ROS 2 workspace build artifacts (colcon regenerates them)
+raise_ros2_ws/build/
+raise_ros2_ws/install/
+raise_ros2_ws/log/
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+
+# What the demos and labs produce when you run them:
+# recorded episodes, downloaded datasets, model weights, generated figures
+out/
+runs/live/
+lessons/**/dataset
+lessons/**/model
+lessons/**/model_all
+lessons/**/checkpoints
+lessons/**/ref
+*.pt
+*.safetensors
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

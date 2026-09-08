@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAISE 2026 — Day-2 Reference Dataset (raise_ripeness_sort_ref)</title>
+<meta name="description" content="RAISE 2026 Summer School — the Day-2 reference imitation-learning dataset: 30 demonstrations of 'pick the red tomato' in LeRobot v3.0 format, used to fine-tune SmolVLA.">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="eyebrow">RAISE 2026 · Day-2 Reference Dataset</div>
+  <h1>🍅 <code style="background:none;color:inherit;font-size:inherit;">raise_ripeness_sort_ref</code></h1>
+  <div class="tagline">"The robot demonstrated <em>'pick the red tomato'</em> to itself 29 times — parked in front of a tomato plant row — this is everything it saw and did."</div>
+  <div class="meta">
+    <span>🎬 <strong>29 episodes</strong></span>
+    <span>🖼️ <strong>2,030 frames</strong></span>
+    <span>💾 <strong>~35 MB</strong></span>
+    <span>📦 <strong>LeRobot v3.0</strong></span>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- 1. WHAT IS THIS -->
+<section>
+  <h2><span class="num">1</span>What Is This Dataset?</h2>
+  <p class="lead">This is the <strong>reference imitation-learning dataset</strong> for Day 2 of RAISE 2026. It captures 29 verified demonstrations of a single manipulation task — <em>"pick the red tomato"</em> — recorded in the shared simulation with the robot parked in front of a tomato plant row, so <strong>every frame shows real greenhouse context</strong>. It is the training set for the reference SmolVLA checkpoint recipe (the published checkpoint scored 100/100 on the Lab-2.2 evaluator, 8/8 autonomous picks).</p>
+  <div class="grid-2">
+    <div class="pillar">
+      <strong>The task</strong><br>
+      Two tomatoes — one red, one green — spawn <strong>floating in mid-air</strong> at the arm's two grasp points (gravity disabled — the "no-IK trick": they appear exactly where the gripper can reach). The UR5e arm must approach, descend, grasp the <em>red</em> one, lift it, and place it aside — leaving the green distractor untouched.
+    </div>
+    <div class="pillar">
+      <strong>Why it teaches</strong><br>
+      The red tomato <strong>swaps sides every episode</strong> (15 red-left + 14 red-right — one take was auto-discarded by the record-time grasp check). Memorizing one trajectory scores 50% at best; the model is forced to <em>look</em> at the wrist camera and <em>read</em> the instruction to know which way to go.
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <h4>Instruction</h4>
+      <p><strong>"pick the red tomato"</strong></p>
+      <p>One natural-language task, conditioning every frame.</p>
+    </div>
+    <div class="card">
+      <h4>Observation</h4>
+      <p><strong>Wrist camera + joint state</strong></p>
+      <p>224×224×3 RGB image and 7 floats (6 UR5e joints + gripper), at 10 Hz.</p>
+    </div>
+    <div class="card">
+      <h4>Action</h4>
+      <p><strong>7 commanded values</strong></p>
+      <p>The same 6 joints + gripper — what the arm was <em>told</em> to do at each timestep.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2. WATCH AN EPISODE -->
+<section>
+  <h2><span class="num">2</span>Watch an Episode</h2>
+  <p class="lead">Every episode is the same choreography — approach ➜ descend ➜ <strong>grasp</strong> ➜ lift ➜ place — seen through the robot's own wrist camera. Note how the arm heads to opposite sides in the two episodes below.</p>
+
+  <div class="image-grid">
+    <figure>
+      <img src="raiseschool__raise_ripeness_sort_ref/preview/ep0_redL.gif" alt="Episode 0 wrist-camera animation — red tomato on the left">
+      <figcaption>Episode 0 — red tomato on the <strong>LEFT</strong></figcaption>
+    </figure>
+    <figure>
+      <img src="raiseschool__raise_ripeness_sort_ref/preview/ep1_redR.gif" alt="Episode 1 wrist-camera animation — red tomato on the right">
+      <figcaption>Episode 1 — red tomato on the <strong>RIGHT</strong></figcaption>
+    </figure>
+  </div>
+
+  <h3>The six key moments, side by side</h3>
+  <figure>
+    <img src="raiseschool__raise_ripeness_sort_ref/preview/contact_sheet.png" alt="Contact sheet: start, approach, descend, grasp, lift, place for episodes 0 and 1">
+    <figcaption>Top row = episode 0 (red left) · bottom row = episode 1 (red right). Columns: start → approach → descend → <strong>grasp</strong> → lift → place. In the last column the red tomato is <em>gone</em> (carried away and released) while the green distractor is untouched — that's the task, executed and captured.</figcaption>
+  </figure>
+
+  <h3>What you're actually seeing in the frames</h3>
+  <div class="grid-3">
+    <div class="card">
+      <h4>The greenhouse backdrop</h4>
+      <p><strong>Tomato plants in every frame</strong> — the robot records parked facing the plant row at (−2, 3), so the wrist camera sees foliage and sandy greenhouse ground, matching the Day-3 harvesting setting.</p>
+    </div>
+    <div class="card">
+      <h4>The floating tomatoes</h4>
+      <p>Spawned in mid-air at the arm's two grasp points with <strong>gravity disabled</strong> — the "no-IK trick": place the target exactly where the gripper can reach, in front of the plant.</p>
+    </div>
+    <div class="card">
+      <h4>The yellow / grey shapes</h4>
+      <p>The robot's <strong>own body</strong> seen by its wrist camera — Husky side panel, wheel, and gripper fingers.</p>
+    </div>
+  </div>
+  <div class="pillar" style="border-left-color: var(--accent);">
+    <strong>Why a re-record?</strong><br>
+    The first version of this dataset was captured at the robot's default parking spot in the empty aisle west of the crop, so the camera saw bare ground and no plants. It was re-recorded on 5&nbsp;July&nbsp;2026 facing a tomato plant row — same pipeline, same task — so the training backdrop now matches the greenhouse-harvesting story and the Day-3 challenge setting.
+  </div>
+</section>
+
+<!-- 3. THE ACTION SIGNAL -->
+<section>
+  <h2><span class="num">3</span>What the Numbers Look Like</h2>
+  <p class="lead">Images are only half the data — each frame also stores the robot's measured state and the commanded action. Here is the action signal for one full episode.</p>
+  <figure>
+    <img src="raiseschool__raise_ripeness_sort_ref/preview/action_curves.png" alt="Action curves: 7 commanded values over episode 0, with a zoom on the gripper command vs measurement">
+    <figcaption>Left: all 7 commanded values over episode 0 (6 arm joints + gripper). Right: zoom on the gripper — the <strong>command</strong> snaps closed at the grasp moment while the <strong>measured</strong> joint stalls on the tomato. That stall is <em>why</em> the grasp trigger uses the command, not the measurement.</figcaption>
+  </figure>
+</section>
+
+<!-- 4. BY THE NUMBERS -->
+<section>
+  <h2><span class="num">4</span>The Dataset, by the Numbers</h2>
+  <table>
+    <tr><th>Property</th><th>Value</th></tr>
+    <tr><td>Instruction</td><td><strong>"pick the red tomato"</strong> (1 task)</td></tr>
+    <tr><td>Episodes</td><td><strong>29</strong> — 15 red-left + 14 red-right (one take auto-discarded by the grasp check)</td></tr>
+    <tr><td>Frames</td><td><strong>2,030</strong> (70 per episode = 7.0 s @ 10 Hz)</td></tr>
+    <tr><td>Robot</td><td>UR5e + Robotiq 85 gripper (simulation)</td></tr>
+    <tr><td>Camera</td><td><code>observation.images.wrist</code> — 224×224×3 RGB</td></tr>
+    <tr><td>State / action</td><td>7 × float32 — 6 UR5e joints + gripper</td></tr>
+    <tr><td>Scene</td><td>Robot parked facing the plant at (−2, 3) — <strong>plants visible in every frame</strong></td></tr>
+    <tr><td>Quality</td><td>Every episode's grasp <strong>verified at record time</strong>; 0 NaNs</td></tr>
+    <tr><td>Split</td><td>train: episodes 0–28 (all)</td></tr>
+    <tr><td>Format</td><td>LeRobot <strong>v3.0</strong></td></tr>
+    <tr><td>Size on disk</td><td><strong>~35 MB</strong> (greenhouse visuals compress less than bare ground)</td></tr>
+  </table>
+
+  <h3>How much data was generated</h3>
+  <p>Raw sensor volume — what the recorder actually captured:</p>
+  <table>
+    <tr><th>Stream</th><th>Per frame</th><th>× 2,030 frames</th><th>Share</th></tr>
+    <tr><td>Wrist camera (224×224×3 uint8)</td><td>147.0 KB</td><td><strong>291.5 MB</strong> raw pixels</td><td>99.96%</td></tr>
+    <tr><td>State (7 × float32)</td><td>28 B</td><td>0.06 MB</td><td>0.02%</td></tr>
+    <tr><td>Action (7 × float32)</td><td>28 B</td><td>0.06 MB</td><td>0.02%</td></tr>
+  </table>
+  <p>On disk after LeRobot's parquet compression (measured):</p>
+  <table>
+    <tr><th>File</th><th>Size</th></tr>
+    <tr><td><code>data/chunk-000/file-000.parquet</code> (all 2,030 frames)</td><td><strong>33.1 MB</strong></td></tr>
+    <tr><td><code>meta/</code> (episodes, stats, tasks, info)</td><td>0.12 MB</td></tr>
+    <tr><td><code>preview/</code> (human-viewable extracts, not training data)</td><td>0.86 MB</td></tr>
+    <tr><td><strong>Total folder</strong></td><td><strong>≈ 35 MB</strong></td></tr>
+  </table>
+  <p>That's a <strong>≈ 9× compression</strong> of the raw pixel stream — ~1.1 MB per episode. (The first, bare-ground version compressed ≈20×; greenhouse foliage carries more visual information, so it compresses less. A nice lesson: <strong>richer context costs bytes</strong>.)</p>
+  <p><strong>Generation rate</strong> (headless sim, hands-free): 29 kept episodes in ~18 minutes ≈ <strong>2 episodes/minute</strong> — each episode is 7 s of recording plus ~23 s of scene setup (spawn → home → pick → verify → cleanup). Scaling up is linear: a 100-episode dataset would take ~50 minutes and ~50 MB on disk.</p>
+</section>
+
+<!-- 5. SCHEMA -->
+<section>
+  <h2><span class="num">5</span>Schema — What's Inside Each Frame</h2>
+  <p class="lead">Every row of the parquet file is one timestep. <strong>The images are inside the parquet</strong> — LeRobot packs every camera frame into <code>data/chunk-000/file-000.parquet</code> alongside states and actions, so you won't see loose <code>.png</code>s in <code>data/</code>. The <code>preview/</code> folder holds extracted samples for humans.</p>
+  <table>
+    <tr><th>Feature</th><th>dtype</th><th>Shape</th><th>Meaning</th></tr>
+    <tr><td><code>observation.images.wrist</code></td><td>image</td><td>224 × 224 × 3</td><td>Wrist-camera RGB frame — what the robot sees</td></tr>
+    <tr><td><code>observation.state</code></td><td>float32</td><td>7</td><td>Measured joint positions: shoulder pan/lift, elbow, wrists 1–3, gripper knuckle</td></tr>
+    <tr><td><code>action</code></td><td>float32</td><td>7</td><td>Commanded joint positions — same 7 names as the state</td></tr>
+    <tr><td><code>timestamp</code></td><td>float32</td><td>1</td><td>Seconds since episode start (10 Hz → 0.0, 0.1, …)</td></tr>
+    <tr><td><code>frame_index</code></td><td>int64</td><td>1</td><td>Frame number within the episode (0–69)</td></tr>
+    <tr><td><code>episode_index</code></td><td>int64</td><td>1</td><td>Which of the 29 episodes this frame belongs to</td></tr>
+    <tr><td><code>index</code></td><td>int64</td><td>1</td><td>Global frame number across the dataset (0–2029)</td></tr>
+    <tr><td><code>task_index</code></td><td>int64</td><td>1</td><td>Index into <code>meta/tasks.parquet</code> (always 0 — one task)</td></tr>
+  </table>
+
+  <h3>Folder map</h3>
+<pre>raiseschool__raise_ripeness_sort_ref/
+├── README.md                  ← the in-repo dataset card
+├── preview/                   ← extracted sample images / GIFs / plots (for humans)
+├── data/chunk-000/
+│   └── file-000.parquet       ← THE data: 2,030 rows of (image, state, action, task)
+└── meta/
+    ├── info.json              ← schema: features, shapes, fps, episode count
+    ├── stats.json             ← per-feature min/max/mean/std (used for normalization)
+    ├── tasks.parquet          ← the instruction string(s)
+    └── episodes/…parquet      ← episode boundaries + per-episode metadata</pre>
+</section>
+
+<!-- 6. USE IT -->
+<section>
+  <h2><span class="num">6</span>Load It, Replay It, Train on It</h2>
+
+  <h3>Look inside yourself</h3>
+<pre># load it and print a frame (venv python — lerobot needs numpy 2)
+~/raise_venvs/lerobot/bin/python3 - &lt;&lt;'PY'
+from lerobot.datasets.lerobot_dataset import LeRobotDataset
+ds = LeRobotDataset('raiseschool/raise_ripeness_sort_ref', root='&lt;this folder&gt;')
+print(ds.num_episodes, 'episodes |', ds.num_frames, 'frames @', ds.fps, 'Hz')
+print(ds[0]['task'], '| action:', ds[0]['action'])
+PY</pre>
+
+  <h3>Replay an episode in the live sim</h3>
+<pre># watch the arm redo episode 0 (grasp_server must be running)
+06_d3 --task C --team ref --episode 0 --spawn</pre>
+
+  <h3>Fine-tune SmolVLA on it</h3>
+<pre>finetune_d4 --task C --team ref --hf-user raiseschool --steps 3000 --launch
+tail -f ~/raise_checkpoints/smolvla_C_ref.train.log     # done in ~55 min on an RTX 4090</pre>
+  <p>This is the recipe behind the reference checkpoint <code>smolvla_C_ref</code> — <strong>100/100</strong> on the Lab-2.2 evaluator (8/8 picks, 0 wrong grabs, ≤452 ms/action). Note: the checkpoint published in the GitHub Release was trained on the earlier bare-ground recording; running the command above retrains on this greenhouse-context version. See <code>RAISE2026/checkpoints/README.md</code> for download options.</p>
+
+  <h3>Go deeper</h3>
+  <ul class="clean">
+    <li><strong>Dataset card:</strong> <a href="raiseschool__raise_ripeness_sort_ref/README.md"><code>raiseschool__raise_ripeness_sort_ref/README.md</code></a> — the in-folder README this page is based on</li>
+    <li><strong>Creation pipeline &amp; design rationale:</strong> <code>RAISE2026/raise_ros2_ws/src/raise2026_labs/day2/DATASET.md</code></li>
+    <li><strong>Student slides:</strong> <code>lectures/day2_l2_vla_api_imitation/RAISE2026_D2L2_Dataset_Pipeline.pdf</code></li>
+  </ul>
+</section>
+
+</div>
+
+<footer>
+  <strong>RAISE 2026 — Robotics &amp; AI Summer School</strong><br>
+  ENET'Com–Sfax · 14–16 July 2026<br>
+  Day-2 Reference Dataset · <code style="background:none;color:inherit;">raiseschool/raise_ripeness_sort_ref</code> · LeRobot v3.0<br>
+  General Chair: Prof. Omar Cheikhrouhou · Technical Program Chair: Prof. Anis Koubaa
+</footer>
+
+</body>
+</html>
