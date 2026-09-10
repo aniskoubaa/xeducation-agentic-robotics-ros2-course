@@ -21,9 +21,9 @@ The checkpoint is a public release asset (687 MB `tar.gz`):
 
 ```bash
 mkdir -p ~/raise_checkpoints/smolvla_C_ref/checkpoints/006000
-curl -L -o /tmp/smolvla_C_ref.tar.gz \
-  https://github.com/aniskoubaa/raise2026-student/releases/download/day2-smolvla-ref-v3/smolvla_C_ref.tar.gz
-tar -xzf /tmp/smolvla_C_ref.tar.gz -C ~/raise_checkpoints/smolvla_C_ref/checkpoints/006000
+curl -L -o /tmp/smolvla_C_ref_v3.tar.gz \
+  https://github.com/aniskoubaa/raise2026-student/releases/download/day2-smolvla-ref-v3/smolvla_C_ref_v3.tar.gz
+tar -xzf /tmp/smolvla_C_ref_v3.tar.gz -C ~/raise_checkpoints/smolvla_C_ref/checkpoints/006000
 ```
 
 The day-2 tools auto-detect the newest checkpoint under
