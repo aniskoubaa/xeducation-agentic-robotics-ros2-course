@@ -9,7 +9,7 @@ model is asked to imitate.
 
     python3 03_episodes.py
 """
-
+import os
 from collections import Counter
 
 from lerobot.datasets.lerobot_dataset import LeRobotDataset
@@ -40,6 +40,7 @@ w, h = tiles[0].size
 strip = Image.new('RGB', (len(tiles) * (w + 6) - 6, h), 'white')
 for i, t in enumerate(tiles):
     strip.paste(t, (i * (w + 6), 0))
+os.makedirs("out", exist_ok=True)
 strip.save(f'out/episode_{EP:02d}_strip.png')
 print(f'wrote out/episode_{EP:02d}_strip.png   t =',
       ' '.join(f'{s / ds.fps:.1f}' for s in STRIP), 's  - left to right, the pick')
