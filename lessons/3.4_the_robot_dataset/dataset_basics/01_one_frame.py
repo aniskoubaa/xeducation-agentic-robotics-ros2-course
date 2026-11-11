@@ -7,7 +7,7 @@ told to do.  Everything else in the folder is bookkeeping around these four.
     python3 01_one_frame.py            # frame 33 - the moment the gripper closes
     python3 01_one_frame.py 100        # any other frame
 """
-
+import os
 import sys
 
 from lerobot.datasets.lerobot_dataset import LeRobotDataset
@@ -42,6 +42,7 @@ print('3 action  action                  ', seven(f['action']),
 # ---- 4. INSTRUCTION - what it was told to do, in words --------------------
 print('4 task    task                    ', repr(f['task']))
 
+os.makedirs("out", exist_ok=True)
 png = f'out/frame_{I:05d}.png'
 Image.fromarray((img.permute(1, 2, 0).numpy() * 255).astype('uint8')).save(png)
 print('wrote', png, ' <- the image really is in the dataset, not beside it')
